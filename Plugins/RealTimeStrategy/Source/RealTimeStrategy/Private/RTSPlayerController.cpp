@@ -53,7 +53,7 @@
 #include "Vision/RTSVisionInfo.h"
 #include "Vision/RTSVisionManager.h"
 #include "Vision/RTSVisionVolume.h"
-
+#include "Subsystems/FormationSelector.h"
 
 ARTSPlayerController::ARTSPlayerController(const FObjectInitializer& ObjectInitializer /*= FObjectInitializer::Get()*/)
     : Super(ObjectInitializer)
@@ -89,6 +89,12 @@ void ARTSPlayerController::BeginPlay()
 {
     Super::BeginPlay();
 
+	//TEST TASK don't like the idea of setting a variable in BeginPlay, I'd rather have all dependencies set through constructor, but with subsystem approach this won't work it seems
+	if (UWorld* World = GetWorld())
+	{
+		FormationSelector = World->GetSubsystem<UFormationSelector>();
+	}
+	
     // Allow immediate updates for interested listeners.
     for (int32 Index = 0; Index < PlayerResourcesComponent->GetResourceTypes().Num(); ++Index)
     {
@@ -1352,6 +1358,8 @@ void ARTSPlayerController::FinishSelectActors()
 			UE_LOG(LogRTS, Log, TEXT("Selected actor %s."), *HitResult.GetActor()->GetName());
 		}
     }
+
+	ActorsToSelect = FormationSelector->GetAllUnitsInFormation(ActorsToSelect);
 
 	SelectActors(ActorsToSelect, ERTSSelectionCameraFocusMode::SELECTIONFOCUS_DoNothing);
 

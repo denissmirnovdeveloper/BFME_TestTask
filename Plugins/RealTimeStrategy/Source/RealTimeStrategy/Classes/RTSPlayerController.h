@@ -13,6 +13,7 @@
 #include "RTSPlayerController.generated.h"
 
 
+class UFormationSelector;
 class USkeletalMesh;
 
 class ARTSBuildingCursor;
@@ -445,6 +446,10 @@ private:
     /** Volume that restricts the camera movement of this player. */
     UPROPERTY()
     ARTSCameraBoundsVolume* CameraBoundsVolume;
+
+	/** Used to select all actors in a formation when selecting one or more of them */
+	UPROPERTY()
+	UFormationSelector* FormationSelector;
 
     /** Last horizontal axis input applied to camera movement. */
     float CameraLeftRightAxisValue;
